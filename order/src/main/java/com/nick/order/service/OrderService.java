@@ -1,6 +1,6 @@
 package com.nick.order.service;
 
-import com.nick.order.dto.OrderDto;
+import com.nick.order.dto.OrderDTO;
 
 public interface OrderService {
     /**
@@ -8,5 +8,5 @@ public interface OrderService {
      * @param orderDto
      * @return
      */
-    OrderDto create(OrderDto orderDto);
+    OrderDTO create(OrderDTO orderDto);
 }

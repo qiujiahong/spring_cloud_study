@@ -1,7 +1,7 @@
 package com.nick.order.service.impl;
 
 import com.nick.order.dataobject.OrderMaster;
-import com.nick.order.dto.OrderDto;
+import com.nick.order.dto.OrderDTO;
 import com.nick.order.enums.OrderStatusEnum;
 import com.nick.order.enums.PayStatusEnum;
 import com.nick.order.repository.OrderDetailRepository;
@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
      *
      */
     @Override
-    public OrderDto create(OrderDto orderDto) {
+    public OrderDTO create(OrderDTO orderDto) {
 
         // TODO 1.查询商品信息(调用商品服务)
         // todo 2.计算总价

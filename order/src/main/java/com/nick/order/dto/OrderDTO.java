@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Data
-public class OrderDto {
+public class OrderDTO {
     private String orderId;
     private String buyerName;  //买家名字
     private String buyerPhone; //买家电话
