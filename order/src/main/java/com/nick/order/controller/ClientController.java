@@ -1,5 +1,6 @@
 package com.nick.order.controller;
 
+import com.nick.order.client.ProductClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -15,8 +16,11 @@ public class ClientController {
 //    @Autowired
 //    private LoadBalancerClient loadBalancerClient;
 
+//    @Autowired
+//    private RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    private ProductClient productClient;
 
 
     @GetMapping("/getProductMsg")
@@ -33,7 +37,9 @@ public class ClientController {
 //        String response =  restTemplate.getForObject(url,String.class);
 
         //3.利用@LoadBalanced注解，可在restTemplate里使用应用名字
-        String response =  restTemplate.getForObject("http://PRODUCT/msg",String.class);
+//        String response =  restTemplate.getForObject("http://PRODUCT/msg",String.class);
+
+        String response = productClient.productMsg();
         log.info("resoponse={}", response);
         return response;
     }
