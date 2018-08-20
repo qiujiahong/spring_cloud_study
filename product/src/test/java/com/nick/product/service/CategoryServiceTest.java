@@ -1,4 +1,4 @@
-package com.nick.product.service.impl;
+package com.nick.product.service;
 
 import com.nick.product.dataobject.ProductCategory;
 import com.nick.product.service.CategoryService;
