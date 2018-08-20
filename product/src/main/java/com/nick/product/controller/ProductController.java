@@ -1,5 +1,6 @@
 package com.nick.product.controller;
 
+import com.nick.product.dto.CartDTO;
 import com.nick.product.dataobject.ProductCategory;
 import com.nick.product.dataobject.ProductInfo;
 import com.nick.product.service.CategoryService;
@@ -73,4 +74,8 @@ public class ProductController {
         return  productService.findList(productIdList);
     }
 
+    @PostMapping("/decreaseStock")
+    public void decreaseStock(@RequestBody List<CartDTO> cartDTOList){
+        productService.decreaseStock(cartDTOList);
+    }
 }

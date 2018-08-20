@@ -1,5 +1,6 @@
 package com.nick.product.service;
 
+import com.nick.product.dto.CartDTO;
 import com.nick.product.dataobject.ProductInfo;
 
 import java.util.List;
@@ -16,4 +17,10 @@ public interface ProductService {
      * @return
      */
     List<ProductInfo> findList(List<String> productIdList);
+
+    /**
+     * 扣库存
+     * @param cartDTOList
+     */
+    void decreaseStock(List<CartDTO> cartDTOList);
 }
