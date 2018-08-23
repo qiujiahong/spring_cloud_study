@@ -1,9 +1,12 @@
 package com.nick.order.form;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotEmpty;
-
+/**
+ * Created by 廖师兄
+ * 2017-12-10 17:21
+ */
 @Data
 public class OrderForm {
     @NotEmpty(message = "姓名必填")

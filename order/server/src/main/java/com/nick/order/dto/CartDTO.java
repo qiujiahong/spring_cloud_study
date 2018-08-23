@@ -1,8 +1,11 @@
 package com.nick.order.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+/**
+ * Created by 廖师兄
+ * 2017-12-10 22:36
+ */
 @Data
 public class CartDTO {
     /**

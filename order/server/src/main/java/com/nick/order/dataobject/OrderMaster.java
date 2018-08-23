@@ -2,7 +2,6 @@ package com.nick.order.dataobject;
 
 
 import lombok.Data;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,10 +1,7 @@
 package com.nick.order.service.impl;
 
-import com.nick.order.client.ProductClient;
 import com.nick.order.dataobject.OrderDetail;
 import com.nick.order.dataobject.OrderMaster;
-import com.nick.order.dataobject.ProductInfo;
-import com.nick.order.dto.CartDTO;
 import com.nick.order.dto.OrderDTO;
 import com.nick.order.enums.OrderStatusEnum;
 import com.nick.order.enums.PayStatusEnum;
@@ -12,6 +9,9 @@ import com.nick.order.repository.OrderDetailRepository;
 import com.nick.order.repository.OrderMasterRepository;
 import com.nick.order.service.OrderService;
 import com.nick.order.utils.KeyUtil;
+import com.nick.product.client.ProductClient;
+import com.nick.product.common.DecreaseStockInput;
+import com.nick.product.common.ProductInfoOutput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    OrderDetailRepository orderDetailRepository;
+    private OrderDetailRepository orderDetailRepository;
 
     @Autowired
-    OrderMasterRepository orderMasterRepository;
+    private OrderMasterRepository orderMasterRepository;
 
     @Autowired
-    ProductClient productClient;
+    private ProductClient productClient;
 
 
     /**
@@ -46,17 +46,18 @@ public class OrderServiceImpl implements OrderService {
         List<String > productIdList = orderDTO.getOrderDetailList().stream()
                 .map(OrderDetail::getProductId)
                 .collect(Collectors.toList());
-        List<ProductInfo> productInfoList = productClient.listForOrder(productIdList);
-        //  2.计算总价
-        BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
-        for(OrderDetail orderDetail: orderDTO.getOrderDetailList()){
-            for (ProductInfo productInfo: productInfoList){
-                if(productInfo.getProductId().equals(orderDetail.getProductId())){
+        List<ProductInfoOutput> productInfoList = productClient.listForOrder(productIdList);
+
+       //计算总价
+        BigDecimal orderAmout = new BigDecimal(BigInteger.ZERO);
+        for (OrderDetail orderDetail: orderDTO.getOrderDetailList()) {
+            for (ProductInfoOutput productInfo: productInfoList) {
+                if (productInfo.getProductId().equals(orderDetail.getProductId())) {
                     //单价*数量
-                    orderAmount= productInfo.getProductPrice()
+                    orderAmout = productInfo.getProductPrice()
                             .multiply(new BigDecimal(orderDetail.getProductQuantity()))
-                    .add(orderAmount);
-                    BeanUtils.copyProperties(productInfo,orderDetail);
+                            .add(orderAmout);
+                    BeanUtils.copyProperties(productInfo, orderDetail);
                     orderDetail.setOrderId(orderId);
                     orderDetail.setDetailId(KeyUtil.genUniqueKey());
                     //订单详情入库
@@ -65,17 +66,18 @@ public class OrderServiceImpl implements OrderService {
             }
 
         }
-        //3.扣除库存（调用商品服务）
-        List<CartDTO> cartDTOList =orderDTO.getOrderDetailList().stream()
-                                    .map(e -> new CartDTO(e.getProductId(),e.getProductQuantity()))
-                                    .collect(Collectors.toList());
-        productClient.decreaseStock(cartDTOList);
+
+       //扣库存(调用商品服务)
+        List<DecreaseStockInput> decreaseStockInputList = orderDTO.getOrderDetailList().stream()
+                .map(e -> new DecreaseStockInput(e.getProductId(), e.getProductQuantity()))
+                .collect(Collectors.toList());
+        productClient.decreaseStock(decreaseStockInputList);
 
         //4.订单入库
         OrderMaster orderMaster = new OrderMaster();
         orderDTO.setOrderId(orderId);
-        BeanUtils.copyProperties(orderDTO,orderMaster);
-        orderMaster.setOrderAmount(orderAmount);
+        BeanUtils.copyProperties(orderDTO, orderMaster);
+        orderMaster.setOrderAmount(orderAmout);
         orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
 
