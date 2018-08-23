@@ -1,5 +1,6 @@
 package com.nick.product.service;
 
+import com.nick.product.common.ProductInfoOutput;
 import com.nick.product.dto.CartDTO;
 import com.nick.product.ProductApplicationTests;
 import com.nick.product.dataobject.ProductInfo;
@@ -27,7 +28,7 @@ public class ProductServiceTest extends ProductApplicationTests {
 
     @Test
     public void findList() {
-        List<ProductInfo> list =  productService.findList(
+        List<ProductInfoOutput> list =  productService.findList(
                 Arrays.asList("157875196366160022","164103465734242707"));
         Assert.assertTrue(list.size()>0);
     }
