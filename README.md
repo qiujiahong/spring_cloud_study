@@ -7,4 +7,14 @@
 https://www.jianshu.com/p/cb9944a3b918
 
 
-修改测试用户；
+## 常用命令
+
+* 安装jar包到本地
+
+```
+mvn -Dmaven.test.skip=true -U clean install 
+```
+
+> -U 强制刷新
+> -Dmaven.test.skip=true -- 跳过测试
+
